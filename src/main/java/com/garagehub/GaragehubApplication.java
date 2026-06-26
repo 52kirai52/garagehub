@@ -1,4 +1,4 @@
-package com.garagehub.garagehub;
+package com.garagehub;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
