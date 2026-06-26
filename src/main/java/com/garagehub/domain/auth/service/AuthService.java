@@ -2,6 +2,9 @@ package com.garagehub.domain.auth.service;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import com.garagehub.domain.user.repository.UserRepository;
+
 import java.util.Random;
 
 @Service
@@ -9,13 +12,19 @@ public class AuthService {
 
     private final SmsService smsService;
     private final StringRedisTemplate redisTemplate;
+    private final UserRepository userRepository;
 
-    public AuthService(SmsService smsService, StringRedisTemplate redisTemplate) {
+    public AuthService(SmsService smsService, StringRedisTemplate redisTemplate, UserRepository userRepository) {
         this.smsService = smsService;
         this.redisTemplate = redisTemplate;
+        this.userRepository = userRepository;
     }
 
     public void sendVerificationCode(String phone) {
+        if (userRepository.existsByPhone(phone)) {
+            throw new RuntimeException("이미 가입된 전화번호입니다.");
+        }
+
         String code = generateCode();
 
         try {
