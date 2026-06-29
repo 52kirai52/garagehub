@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.garagehub.domain.user.repository.UserRepository;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 @Service
 public class AuthService {
@@ -13,6 +13,7 @@ public class AuthService {
     private final SmsService smsService;
     private final StringRedisTemplate redisTemplate;
     private final UserRepository userRepository;
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public AuthService(SmsService smsService, StringRedisTemplate redisTemplate, UserRepository userRepository) {
         this.smsService = smsService;
@@ -50,6 +51,6 @@ public class AuthService {
     }
 
     private String generateCode() {
-        return String.valueOf(new Random().nextInt(900000) + 100000);
+        return String.format("%06d", secureRandom.nextInt(1000000));
     }
 }
